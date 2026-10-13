@@ -1,0 +1,20 @@
+# Roadmap - Slate Mobile
+
+## Sprint 1 (8 - 13 Oct) - Setup & Autenticación + Clientes
+- [ ] `chore/initial-expo-setup`: Inicialización de proyecto Expo React Native.
+- [ ] `docs/roadmap-and-pr-template`: Agregar ROADMAP.md y plantilla de PR.
+- [ ] `chore/api-client-config`: Configuración del cliente HTTP apuntando a la IP local (.env.example).
+- [ ] `feat/auth-screens`: Pantallas de Login y Registro con persistencia de token.
+- [ ] `feat/client-list-and-crud`: Listado y formulario de alta/edición de clientes.
+
+## Sprint 2 (14 - 19 Oct) - Fiados y Pagos
+- [ ] `feat/transactions-screens`: Pantallas para registrar fiados y cobros.
+- [ ] `feat/debtors-screen`: Vista "Quién me debe" ordenada por monto.
+
+## Sprint 3 (20 - 25 Oct) - Recordatorios y Scoring
+- [ ] `feat/local-notifications`: Notificaciones locales programadas para recordatorios.
+- [ ] `feat/risk-score-ui`: Visualización del scoring de riesgo en la ficha del cliente.
+
+## Colchón (26 - 27 Oct) - Ajustes y Entrega
+- [ ] `docs/final-readme`: Instrucciones de ejecución con Expo Go.
+- [ ] `fix/pre-demo-ui-polishing`: Pulido visual y manejo de errores de red.
