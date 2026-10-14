@@ -1,5 +1,7 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
+import { storage } from './storage';
+
 /**
  * URL base de la API backend.
  * En Expo SDK 49+, las variables de entorno que inician con `EXPO_PUBLIC_`
@@ -27,15 +29,12 @@ export const API = axios.create({
 
 /**
  * Interceptor de Peticiones (Request)
- * Inyecta automáticamente el token de autenticación JWT si existe.
+ * Inyecta automáticamente el token de autenticación JWT si existe en SecureStore.
  */
 API.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     try {
-      // TODO: Conectar con el servicio de persistencia (ej. Expo SecureStore o AsyncStorage)
-      // Ejemplo con expo-secure-store:
-      // const token = await SecureStore.getItemAsync('user_token');
-      const token: string | null = null;
+      const token = await storage.getToken();
 
       if (token && config.headers) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -61,14 +60,13 @@ API.interceptors.response.use(
   },
   async (error: AxiosError) => {
     if (error.response) {
-      // El servidor respondió con un código de estado fuera del rango 2xx
       const status = error.response.status;
 
       switch (status) {
         case 401:
           // Token expirado o credenciales inválidas.
-          // TODO: Limpiar sesión en SecureStore/Context y redirigir al login
           console.warn('[API 401] Sesión expirada o no autorizada');
+          await storage.clearAuth();
           break;
         case 403:
           console.warn('[API 403] Acceso denegado');
@@ -83,7 +81,6 @@ API.interceptors.response.use(
           console.warn(`[API ${status}] Error en la respuesta del servidor`);
       }
     } else if (error.request) {
-      // La petición fue realizada pero no se recibió respuesta (ej. backend apagado o IP inaccesible)
       console.error(
         '[API Error de Red] No se pudo conectar con el servidor. Verifica que el backend esté corriendo y que la URL/IP sea alcanzable:',
         error.config?.baseURL

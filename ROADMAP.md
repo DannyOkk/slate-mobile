@@ -1,10 +1,10 @@
 # Roadmap - Slate Mobile
 
 ## Sprint 1 (8 - 13 Oct) - Setup & Autenticación + Clientes
-- [ ] `chore/initial-expo-setup`: Inicialización de proyecto Expo React Native.
-- [ ] `docs/roadmap-and-pr-template`: Agregar ROADMAP.md y plantilla de PR.
-- [ ] `chore/api-client-config`: Configuración del cliente HTTP apuntando a la IP local (.env.example).
-- [ ] `feat/auth-screens`: Pantallas de Login y Registro con persistencia de token.
+- [x] `chore/initial-expo-setup`: Inicialización de proyecto Expo React Native.
+- [x] `docs/roadmap-and-pr-template`: Agregar ROADMAP.md y plantilla de PR.
+- [x] `chore/api-client-config`: Configuración del cliente HTTP apuntando a la IP local (.env.example).
+- [x] `feat/auth-screens`: Pantallas de Login y Registro con persistencia de token.
 - [ ] `feat/client-list-and-crud`: Listado y formulario de alta/edición de clientes.
 
 ## Sprint 2 (14 - 19 Oct) - Fiados y Pagos
