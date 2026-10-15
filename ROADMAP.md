@@ -5,7 +5,7 @@
 - [x] `docs/roadmap-and-pr-template`: Agregar ROADMAP.md y plantilla de PR.
 - [x] `chore/api-client-config`: Configuración del cliente HTTP apuntando a la IP local (.env.example).
 - [x] `feat/auth-screens`: Pantallas de Login y Registro con persistencia de token.
-- [ ] `feat/client-list-and-crud`: Listado y formulario de alta/edición de clientes.
+- [x] `feat/client-list-and-crud`: Listado y formulario de alta/edición de clientes.
 
 ## Sprint 2 (14 - 19 Oct) - Fiados y Pagos
 - [ ] `feat/transactions-screens`: Pantallas para registrar fiados y cobros.
