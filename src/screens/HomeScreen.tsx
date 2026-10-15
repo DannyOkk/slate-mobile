@@ -114,11 +114,17 @@ export function HomeScreen() {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Módulos Disponibles</Text>
           <View style={styles.moduleRow}>
-            <View style={styles.moduleCard}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.moduleCard,
+                styles.moduleCardActive,
+                pressed && styles.moduleCardPressed,
+              ]}
+              onPress={() => router.push('/clients')}>
               <Text style={styles.moduleEmoji}>👥</Text>
               <Text style={styles.moduleTitle}>Clientes</Text>
-              <Text style={styles.moduleStatus}>Próximamente</Text>
-            </View>
+              <Text style={styles.moduleStatusActive}>Administrar →</Text>
+            </Pressable>
             <View style={styles.moduleCard}>
               <Text style={styles.moduleEmoji}>📝</Text>
               <Text style={styles.moduleTitle}>Fiados</Text>
@@ -321,6 +327,20 @@ const styles = StyleSheet.create({
   moduleStatus: {
     fontSize: 11,
     color: '#64748B',
+    marginTop: 2,
+  },
+  moduleCardActive: {
+    borderColor: 'rgba(56, 189, 248, 0.4)',
+    backgroundColor: 'rgba(32, 138, 239, 0.08)',
+  },
+  moduleCardPressed: {
+    opacity: 0.8,
+    transform: [{ scale: 0.98 }],
+  },
+  moduleStatusActive: {
+    fontSize: 11,
+    color: '#38BDF8',
+    fontWeight: '700',
     marginTop: 2,
   },
   logoutButton: {
