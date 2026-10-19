@@ -155,13 +155,23 @@ export function ClientListScreen() {
           </View>
         </View>
 
-        <Pressable
-          onPress={handleOpenCreateModal}
-          style={({ pressed }) => [styles.headerAddButton, pressed && styles.pressed]}
-          hitSlop={6}>
-          <Ionicons name="person-add" size={17} color="#FFFFFF" />
-          <Text style={styles.headerAddButtonText}>Nuevo</Text>
-        </Pressable>
+        <View style={styles.headerRight}>
+          <Pressable
+            onPress={() => router.push('/debtors')}
+            style={({ pressed }) => [styles.headerDebtorsButton, pressed && styles.pressed]}
+            hitSlop={6}>
+            <Ionicons name="wallet-outline" size={15} color="#F87171" />
+            <Text style={styles.headerDebtorsButtonText}>Deudores</Text>
+          </Pressable>
+
+          <Pressable
+            onPress={handleOpenCreateModal}
+            style={({ pressed }) => [styles.headerAddButton, pressed && styles.pressed]}
+            hitSlop={6}>
+            <Ionicons name="person-add" size={16} color="#FFFFFF" />
+            <Text style={styles.headerAddButtonText}>Nuevo</Text>
+          </Pressable>
+        </View>
       </View>
 
       {/* Barra de Búsqueda */}
@@ -307,13 +317,34 @@ const styles = StyleSheet.create({
     color: '#94A3B8',
     marginTop: 1,
   },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  headerDebtorsButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    paddingHorizontal: 11,
+    paddingVertical: 8,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(239, 68, 68, 0.3)',
+  },
+  headerDebtorsButtonText: {
+    color: '#F87171',
+    fontWeight: '700',
+    fontSize: 12,
+  },
   headerAddButton: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
     backgroundColor: '#208AEF',
-    paddingHorizontal: 14,
-    paddingVertical: 9,
+    paddingHorizontal: 13,
+    paddingVertical: 8,
     borderRadius: 12,
     shadowColor: '#208AEF',
     shadowOffset: { width: 0, height: 3 },
