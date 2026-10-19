@@ -8,7 +8,7 @@
 - [x] `feat/client-list-and-crud`: Listado y formulario de alta/edición de clientes.
 
 ## Sprint 2 (14 - 19 Oct) - Fiados y Pagos
-- [ ] `feat/transactions-screens`: Pantallas para registrar fiados y cobros.
+- [x] `feat/transactions-screens`: Pantallas para registrar fiados y cobros.
 - [ ] `feat/debtors-screen`: Vista "Quién me debe" ordenada por monto.
 
 ## Sprint 3 (20 - 25 Oct) - Recordatorios y Scoring

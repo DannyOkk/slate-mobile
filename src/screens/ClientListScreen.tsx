@@ -123,6 +123,19 @@ export function ClientListScreen() {
     );
   };
 
+  // Navegación al detalle y cuenta corriente del cliente
+  const handleSelectClient = (client: Client) => {
+    router.push({
+      pathname: '/client-detail',
+      params: {
+        clientId: client.id.toString(),
+        clientName: client.name,
+        clientPhone: client.phone || '',
+        clientAddress: client.address || '',
+      },
+    });
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* Cabecera Principal */}
@@ -185,6 +198,7 @@ export function ClientListScreen() {
               client={item}
               onEdit={handleOpenEditModal}
               onDelete={handleDeleteClient}
+              onPress={handleSelectClient}
             />
           )}
           contentContainerStyle={styles.listContent}
