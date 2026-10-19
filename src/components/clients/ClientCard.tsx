@@ -14,6 +14,7 @@ interface ClientCardProps {
   client: Client;
   onEdit: (client: Client) => void;
   onDelete: (client: Client) => void;
+  onPress?: (client: Client) => void;
 }
 
 // Colores de acento dinámicos para los avatares según el nombre
@@ -35,7 +36,7 @@ function getAvatarColor(name: string): string {
   return AVATAR_COLORS[index];
 }
 
-export function ClientCard({ client, onEdit, onDelete }: ClientCardProps) {
+export function ClientCard({ client, onEdit, onDelete, onPress }: ClientCardProps) {
   const initial = client.name ? client.name.charAt(0).toUpperCase() : 'C';
   const avatarBg = getAvatarColor(client.name);
 
@@ -47,7 +48,9 @@ export function ClientCard({ client, onEdit, onDelete }: ClientCardProps) {
 
   return (
     <View style={styles.card}>
-      <View style={styles.cardMain}>
+      <Pressable
+        style={({ pressed }) => [styles.cardMain, pressed && Boolean(onPress) && styles.cardMainPressed]}
+        onPress={() => onPress?.(client)}>
         {/* Avatar distintivo */}
         <View style={[styles.avatar, { backgroundColor: avatarBg }]}>
           <Text style={styles.avatarText}>{initial}</Text>
@@ -55,9 +58,14 @@ export function ClientCard({ client, onEdit, onDelete }: ClientCardProps) {
 
         {/* Información central */}
         <View style={styles.infoContainer}>
-          <Text style={styles.name} numberOfLines={1}>
-            {client.name}
-          </Text>
+          <View style={styles.nameRow}>
+            <Text style={styles.name} numberOfLines={1}>
+              {client.name}
+            </Text>
+            {onPress && (
+              <Ionicons name="chevron-forward" size={18} color="#64748B" />
+            )}
+          </View>
 
           {/* Teléfono */}
           {client.phone ? (
@@ -95,7 +103,7 @@ export function ClientCard({ client, onEdit, onDelete }: ClientCardProps) {
             </View>
           ) : null}
         </View>
-      </View>
+      </Pressable>
 
       {/* Botones de acción lateral/inferior */}
       <View style={styles.actionsContainer}>
@@ -146,6 +154,9 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     gap: 14,
   },
+  cardMainPressed: {
+    opacity: 0.8,
+  },
   avatar: {
     width: 48,
     height: 48,
@@ -167,11 +178,17 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 5,
   },
+  nameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   name: {
     fontSize: 17,
     fontWeight: '700',
     color: '#F8FAFC',
     letterSpacing: -0.3,
+    flex: 1,
   },
   detailRow: {
     flexDirection: 'row',
