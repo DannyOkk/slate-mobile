@@ -25,6 +25,7 @@ export default function RootLayout() {
           <Stack.Screen name="register" />
           <Stack.Screen name="clients" />
           <Stack.Screen name="client-detail" />
+          <Stack.Screen name="debtors" />
           <Stack.Screen name="explore" />
         </Stack>
       </ThemeProvider>

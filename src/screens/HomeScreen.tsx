@@ -125,11 +125,17 @@ export function HomeScreen() {
               <Text style={styles.moduleTitle}>Clientes</Text>
               <Text style={styles.moduleStatusActive}>Administrar →</Text>
             </Pressable>
-            <View style={styles.moduleCard}>
-              <Text style={styles.moduleEmoji}>📝</Text>
-              <Text style={styles.moduleTitle}>Fiados</Text>
-              <Text style={styles.moduleStatus}>Sprint 2</Text>
-            </View>
+            <Pressable
+              style={({ pressed }) => [
+                styles.moduleCard,
+                styles.moduleCardDebtors,
+                pressed && styles.moduleCardPressed,
+              ]}
+              onPress={() => router.push('/debtors')}>
+              <Text style={styles.moduleEmoji}>💸</Text>
+              <Text style={styles.moduleTitle}>Quién me debe</Text>
+              <Text style={styles.moduleStatusDebtors}>Ver deudores →</Text>
+            </Pressable>
           </View>
         </View>
 
@@ -340,6 +346,16 @@ const styles = StyleSheet.create({
   moduleStatusActive: {
     fontSize: 11,
     color: '#38BDF8',
+    fontWeight: '700',
+    marginTop: 2,
+  },
+  moduleCardDebtors: {
+    borderColor: 'rgba(239, 68, 68, 0.4)',
+    backgroundColor: 'rgba(239, 68, 68, 0.08)',
+  },
+  moduleStatusDebtors: {
+    fontSize: 11,
+    color: '#F87171',
     fontWeight: '700',
     marginTop: 2,
   },
