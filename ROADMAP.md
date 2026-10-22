@@ -12,7 +12,7 @@
 - [x] `feat/debtors-screen`: Vista "Quién me debe" ordenada por monto.
 
 ## Sprint 3  - Recordatorios y Scoring
-- [ ] `feat/local-notifications`: Notificaciones locales programadas para recordatorios.
+- [x] `feat/local-notifications`: Notificaciones locales programadas para recordatorios.
 - [x] `feat/risk-score-ui`: Visualización del scoring de riesgo en la ficha del cliente.
 
 ## Colchón  - Ajustes y Entrega
