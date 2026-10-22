@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 
+import { RiskBadge } from '@/components/RiskBadge';
 import { Client } from '@/types/client';
 
 interface ClientCardProps {
@@ -59,9 +60,14 @@ export function ClientCard({ client, onEdit, onDelete, onPress }: ClientCardProp
         {/* Información central */}
         <View style={styles.infoContainer}>
           <View style={styles.nameRow}>
-            <Text style={styles.name} numberOfLines={1}>
-              {client.name}
-            </Text>
+            <View style={styles.nameWithBadge}>
+              <Text style={styles.name} numberOfLines={1}>
+                {client.name}
+              </Text>
+              {client.riskLevel ? (
+                <RiskBadge level={client.riskLevel} size="small" />
+              ) : null}
+            </View>
             {onPress && (
               <Ionicons name="chevron-forward" size={18} color="#64748B" />
             )}
@@ -182,13 +188,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    gap: 8,
+  },
+  nameWithBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    flex: 1,
+    flexWrap: 'wrap',
   },
   name: {
     fontSize: 17,
     fontWeight: '700',
     color: '#F8FAFC',
     letterSpacing: -0.3,
-    flex: 1,
   },
   detailRow: {
     flexDirection: 'row',

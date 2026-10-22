@@ -132,6 +132,7 @@ export function ClientListScreen() {
         clientName: client.name,
         clientPhone: client.phone || '',
         clientAddress: client.address || '',
+        riskLevel: client.riskLevel || 'BAJO',
       },
     });
   };
