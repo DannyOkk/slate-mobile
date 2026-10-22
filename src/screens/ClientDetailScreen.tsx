@@ -15,9 +15,11 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { RiskBadge } from '@/components/RiskBadge';
+import { ReminderModal } from '@/components/reminders/ReminderModal';
 import { AddTransactionModal } from '@/components/transactions/AddTransactionModal';
 import { TransactionItem } from '@/components/transactions/TransactionItem';
 import { clientService } from '@/services/clientService';
+import { notificationService } from '@/services/notificationService';
 import { transactionService } from '@/services/transactionService';
 import { RiskLevel } from '@/types/client';
 import {
@@ -56,6 +58,9 @@ export function ClientDetailScreen() {
   // Modal de Transacción
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalType, setModalType] = useState<TransactionType>('FIADO');
+
+  // Modal de Recordatorio
+  const [isReminderModalVisible, setIsReminderModalVisible] = useState(false);
 
   const fetchTransactions = useCallback(
     async (showFullLoader = true) => {
@@ -116,6 +121,56 @@ export function ClientDetailScreen() {
     }
   };
 
+  const handleOpenReminderModal = async () => {
+    if (!hasDebt) {
+      Alert.alert('Sin deuda', 'El cliente no tiene saldo deudor pendiente.');
+      return;
+    }
+
+    const hasPermission =
+      await notificationService.requestNotificationPermissions();
+    if (!hasPermission) {
+      Alert.alert(
+        'Permisos de Notificación',
+        'Para recibir recordatorios de cobro, necesitás autorizar las notificaciones de Slate en los ajustes del dispositivo.',
+        [{ text: 'Entendido', style: 'default' }]
+      );
+      return;
+    }
+
+    setIsReminderModalVisible(true);
+  };
+
+  const handleConfirmReminder = async (scheduledDate: Date) => {
+    try {
+      await notificationService.schedulePaymentReminder(
+        clientDisplayName,
+        totalBalance,
+        scheduledDate
+      );
+      setIsReminderModalVisible(false);
+
+      const formattedDate = new Intl.DateTimeFormat('es-AR', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+      }).format(scheduledDate);
+
+      Alert.alert(
+        'Recordatorio Programado',
+        `Te avisaremos el ${formattedDate} para cobrar a ${clientDisplayName}.`
+      );
+    } catch (error: any) {
+      Alert.alert(
+        'Error al programar',
+        error?.message || 'No se pudo programar el recordatorio.'
+      );
+    }
+  };
+
   const clientDisplayName = summary?.clientName || params.clientName || 'Cliente';
   const totalBalance = summary?.totalBalance ?? 0;
   const hasDebt = totalBalance > 0;
@@ -140,14 +195,28 @@ export function ClientDetailScreen() {
           </View>
         </View>
 
-        {params.clientPhone ? (
-          <Pressable
-            onPress={handleCallClient}
-            style={({ pressed }) => [styles.callButton, pressed && styles.pressed]}
-            hitSlop={6}>
-            <Ionicons name="call" size={17} color="#38BDF8" />
-          </Pressable>
-        ) : null}
+        <View style={styles.headerRightActions}>
+          {hasDebt ? (
+            <Pressable
+              onPress={handleOpenReminderModal}
+              style={({ pressed }) => [
+                styles.reminderHeaderButton,
+                pressed && styles.pressed,
+              ]}
+              hitSlop={6}>
+              <Ionicons name="notifications-outline" size={17} color="#38BDF8" />
+            </Pressable>
+          ) : null}
+
+          {params.clientPhone ? (
+            <Pressable
+              onPress={handleCallClient}
+              style={({ pressed }) => [styles.callButton, pressed && styles.pressed]}
+              hitSlop={6}>
+              <Ionicons name="call" size={17} color="#38BDF8" />
+            </Pressable>
+          ) : null}
+        </View>
       </View>
 
       {/* Contenido Principal con Scroll / FlatList */}
@@ -222,6 +291,21 @@ export function ClientDetailScreen() {
                     </Text>
                   </View>
                 ) : null}
+
+                {/* Botón para programar recordatorio de cobro */}
+                {hasDebt ? (
+                  <Pressable
+                    onPress={handleOpenReminderModal}
+                    style={({ pressed }) => [
+                      styles.reminderHeroButton,
+                      pressed && styles.pressed,
+                    ]}>
+                    <Ionicons name="notifications-outline" size={15} color="#38BDF8" />
+                    <Text style={styles.reminderHeroButtonText}>
+                      Programar Recordatorio de Cobro
+                    </Text>
+                  </Pressable>
+                ) : null}
               </View>
 
               {/* Botones de Acción Rápida: Fiado y Pago */}
@@ -281,6 +365,15 @@ export function ClientDetailScreen() {
         onClose={() => setIsModalVisible(false)}
         onSave={handleSaveTransaction}
       />
+
+      {/* Modal para Programar Recordatorio */}
+      <ReminderModal
+        visible={isReminderModalVisible}
+        clientName={clientDisplayName}
+        debtAmount={totalBalance}
+        onClose={() => setIsReminderModalVisible(false)}
+        onConfirm={handleConfirmReminder}
+      />
     </SafeAreaView>
   );
 }
@@ -330,6 +423,39 @@ const styles = StyleSheet.create({
     color: '#94A3B8',
     marginTop: 1,
   },
+  headerRightActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  reminderHeaderButton: {
+    width: 38,
+    height: 38,
+    borderRadius: 12,
+    backgroundColor: 'rgba(56, 189, 248, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(56, 189, 248, 0.3)',
+  },
+  reminderHeroButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: 'rgba(56, 189, 248, 0.08)',
+    borderRadius: 10,
+    paddingVertical: 9,
+    paddingHorizontal: 12,
+    marginTop: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(56, 189, 248, 0.25)',
+  },
+  reminderHeroButtonText: {
+    color: '#38BDF8',
+    fontSize: 13,
+    fontWeight: '700',
+  },
   callButton: {
     width: 38,
     height: 38,
@@ -339,7 +465,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'rgba(56, 189, 248, 0.3)',
-    marginLeft: 8,
   },
   centeredContainer: {
     flex: 1,
