@@ -13,7 +13,7 @@
 
 ## Sprint 3  - Recordatorios y Scoring
 - [ ] `feat/local-notifications`: Notificaciones locales programadas para recordatorios.
-- [ ] `feat/risk-score-ui`: Visualización del scoring de riesgo en la ficha del cliente.
+- [x] `feat/risk-score-ui`: Visualización del scoring de riesgo en la ficha del cliente.
 
 ## Colchón  - Ajustes y Entrega
 - [ ] `docs/final-readme`: Instrucciones de ejecución con Expo Go.

@@ -14,9 +14,12 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { RiskBadge } from '@/components/RiskBadge';
 import { AddTransactionModal } from '@/components/transactions/AddTransactionModal';
 import { TransactionItem } from '@/components/transactions/TransactionItem';
+import { clientService } from '@/services/clientService';
 import { transactionService } from '@/services/transactionService';
+import { RiskLevel } from '@/types/client';
 import {
   ClientTransactionsSummary,
   CreateTransactionPayload,
@@ -38,11 +41,15 @@ export function ClientDetailScreen() {
     clientName?: string;
     clientPhone?: string;
     clientAddress?: string;
+    riskLevel?: string;
   }>();
 
   const clientId = Number(params.clientId);
 
   const [summary, setSummary] = useState<ClientTransactionsSummary | null>(null);
+  const [currentRiskLevel, setCurrentRiskLevel] = useState<RiskLevel>(
+    (params.riskLevel as RiskLevel) || 'BAJO'
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -56,8 +63,14 @@ export function ClientDetailScreen() {
 
       try {
         if (showFullLoader) setIsLoading(true);
-        const data = await transactionService.getClientTransactions(clientId);
-        setSummary(data);
+        const [transactionsData, clientData] = await Promise.all([
+          transactionService.getClientTransactions(clientId),
+          clientService.getClientById(clientId).catch(() => null),
+        ]);
+        setSummary(transactionsData);
+        if (clientData?.riskLevel) {
+          setCurrentRiskLevel(clientData.riskLevel);
+        }
       } catch (error: any) {
         const msg =
           error?.response?.data?.message ||
@@ -168,23 +181,26 @@ export function ClientDetailScreen() {
                 ]}>
                 <View style={styles.heroTopRow}>
                   <Text style={styles.heroLabel}>Saldo Actual Acumulado</Text>
-                  <View
-                    style={[
-                      styles.statusPill,
-                      hasDebt ? styles.statusPillDebt : styles.statusPillClean,
-                    ]}>
-                    <Ionicons
-                      name={hasDebt ? 'alert-circle' : 'checkmark-circle'}
-                      size={14}
-                      color={hasDebt ? '#EF4444' : '#10B981'}
-                    />
-                    <Text
+                  <View style={styles.heroBadgesRow}>
+                    <RiskBadge level={currentRiskLevel} size="small" />
+                    <View
                       style={[
-                        styles.statusPillText,
-                        hasDebt ? styles.statusTextDebt : styles.statusTextClean,
+                        styles.statusPill,
+                        hasDebt ? styles.statusPillDebt : styles.statusPillClean,
                       ]}>
-                      {hasDebt ? 'Deuda Pendiente' : 'Al Día'}
-                    </Text>
+                      <Ionicons
+                        name={hasDebt ? 'alert-circle' : 'checkmark-circle'}
+                        size={14}
+                        color={hasDebt ? '#EF4444' : '#10B981'}
+                      />
+                      <Text
+                        style={[
+                          styles.statusPillText,
+                          hasDebt ? styles.statusTextDebt : styles.statusTextClean,
+                        ]}>
+                        {hasDebt ? 'Deuda Pendiente' : 'Al Día'}
+                      </Text>
+                    </View>
                   </View>
                 </View>
 
@@ -367,6 +383,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 8,
+    gap: 8,
+    flexWrap: 'wrap',
+  },
+  heroBadgesRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    flexWrap: 'wrap',
   },
   heroLabel: {
     fontSize: 13,
