@@ -16,5 +16,5 @@
 - [x] `feat/risk-score-ui`: Visualización del scoring de riesgo en la ficha del cliente.
 
 ## Colchón  - Ajustes y Entrega
-- [ ] `docs/final-readme`: Instrucciones de ejecución con Expo Go.
+- [x] `docs/final-readme`: Instrucciones de ejecución con Expo Go.
 - [ ] `fix/pre-demo-ui-polishing`: Pulido visual y manejo de errores de red.
