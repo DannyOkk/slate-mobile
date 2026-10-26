@@ -24,14 +24,14 @@
 
 | Capa / Módulo | Tecnología | Versión / Detalle |
 | :--- | :--- | :--- |
-| **Framework Base** | [React Native](https://reactnative.dev/) | `0.86.3` |
-| **Plataforma Mobile** | [Expo](https://expo.dev/) (Managed Workflow) | SDK `~57.0.28` |
-| **Enrutamiento** | [Expo Router](https://docs.expo.dev/router/introduction/) | `~57.0.26` (File-based Routing) |
+| **Framework Base** | [React Native](https://reactnative.dev/) | `0.88.0` |
+| **Plataforma Mobile** | [Expo](https://expo.dev/) (Managed Workflow) | SDK `^58.0.19` |
+| **Enrutamiento** | [Expo Router](https://docs.expo.dev/router/introduction/) | `~58.0.26` (File-based Routing) |
 | **Lenguaje** | [TypeScript](https://www.typescriptlang.org/) | `~6.0.3` (Strict Mode) |
 | **Cliente HTTP** | [Axios](https://axios-http.com/) | `^1.20.0` (Con interceptores JWT y manejo de red) |
-| **Almacenamiento Seguro** | [Expo SecureStore](https://docs.expo.dev/versions/latest/sdk/securestore/) | `~57.0.4` |
-| **Notificaciones Locales** | [Expo Notifications](https://docs.expo.dev/versions/latest/sdk/notifications/) | `~57.0.24` |
-| **Selectores de Fecha/Hora** | [@react-native-community/datetimepicker](https://github.com/react-native-datetimepicker/datetimepicker) | `9.1.0` |
+| **Almacenamiento Seguro** | [Expo SecureStore](https://docs.expo.dev/versions/latest/sdk/securestore/) | `~58.0.2` |
+| **Notificaciones Locales** | [Expo Notifications](https://docs.expo.dev/versions/latest/sdk/notifications/) | `~58.1.6` |
+| **Selectores de Fecha/Hora** | [@react-native-community/datetimepicker](https://github.com/react-native-datetimepicker/datetimepicker) | `9.2.1` |
 | **Estilos e Iconografía** | Vanilla StyleSheet & `@expo/vector-icons` | Sistema de diseño Dark Slate (`#0F172A`, `#1E293B`, `#38BDF8`) |
 
 ---
