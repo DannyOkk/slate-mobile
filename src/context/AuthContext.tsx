@@ -1,7 +1,15 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
 import { authService } from '@/services/authService';
-import { AuthContextType, LoginPayload, RegisterPayload, User } from '@/types/auth';
+import {
+  AuthContextType,
+  ChangePasswordPayload,
+  LoginPayload,
+  RegisterPayload,
+  UpdateProfilePayload,
+  User,
+} from '@/types/auth';
+import { storage } from '@/services/storage';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -43,6 +51,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setToken(result.token);
   };
 
+  const refreshProfile = useCallback(async () => {
+    const profile = await authService.getProfile();
+    setUser(profile);
+    await storage.saveUser(profile);
+    return profile;
+  }, []);
+
+  const updateProfile = async (payload: UpdateProfilePayload) => {
+    const profile = await authService.updateProfile(payload);
+    setUser(profile);
+    return profile;
+  };
+
+  const changePassword = async (payload: ChangePasswordPayload) => {
+    await authService.changePassword(payload);
+  };
+
   const logout = async () => {
     try {
       await authService.logout();
@@ -59,6 +84,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     isAuthenticated: Boolean(token),
     login,
     register,
+    refreshProfile,
+    updateProfile,
+    changePassword,
     logout,
   };
 

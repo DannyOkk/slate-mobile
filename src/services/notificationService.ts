@@ -1,4 +1,9 @@
 import * as Notifications from 'expo-notifications';
+import {
+  AndroidImportance,
+  IosAuthorizationStatus,
+  SchedulableTriggerInputTypes,
+} from 'expo-notifications';
 import { Platform } from 'react-native';
 
 /**
@@ -20,13 +25,17 @@ Notifications.setNotificationHandler({
  */
 export async function setupAndroidNotificationChannel(): Promise<void> {
   if (Platform.OS === 'android') {
-    await Notifications.setNotificationChannelAsync('default', {
-      name: 'Recordatorios de Cobro',
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#208AEF',
-      sound: 'default',
-    });
+    try {
+      await Notifications.setNotificationChannelAsync('default', {
+        name: 'Recordatorios de Cobro',
+        importance: AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#208AEF',
+        enableVibrate: true,
+      });
+    } catch (error) {
+      console.warn('[setupAndroidNotificationChannel] Canal por defecto administrado por el sistema:', error);
+    }
   }
 }
 
@@ -41,7 +50,7 @@ export async function requestNotificationPermissions(): Promise<boolean> {
   let isGranted =
     currentPermissions.granted ||
     currentPermissions.ios?.status ===
-      Notifications.IosAuthorizationStatus.PROVISIONAL;
+      IosAuthorizationStatus.PROVISIONAL;
 
   if (!isGranted) {
     const requestResult = await Notifications.requestPermissionsAsync({
@@ -55,7 +64,7 @@ export async function requestNotificationPermissions(): Promise<boolean> {
     isGranted =
       requestResult.granted ||
       requestResult.ios?.status ===
-        Notifications.IosAuthorizationStatus.PROVISIONAL;
+        IosAuthorizationStatus.PROVISIONAL;
   }
 
   return isGranted;
@@ -98,7 +107,7 @@ export async function schedulePaymentReminder(
       },
     },
     trigger: {
-      type: Notifications.SchedulableTriggerInputTypes.DATE,
+      type: SchedulableTriggerInputTypes.DATE,
       date,
     },
   });

@@ -1,6 +1,13 @@
 import { API } from './api';
 import { storage } from './storage';
-import { AuthResponse, LoginPayload, RegisterPayload, User } from '@/types/auth';
+import {
+  AuthResponse,
+  ChangePasswordPayload,
+  LoginPayload,
+  RegisterPayload,
+  UpdateProfilePayload,
+  User,
+} from '@/types/auth';
 
 /**
  * Servicio de Autenticación para interactuar con los endpoints de Spring Boot /auth/*.
@@ -53,6 +60,29 @@ export const authService = {
     await storage.saveUser(user);
 
     return { user, token: data.token };
+  },
+
+  async getProfile(): Promise<User> {
+    const response = await API.get<User>('/auth/profile');
+    return response.data;
+  },
+
+  async updateProfile(payload: UpdateProfilePayload): Promise<User> {
+    const response = await API.put<User>('/auth/profile', {
+      name: payload.name.trim(),
+      email: payload.email.trim(),
+      phone: payload.phone.trim(),
+    });
+    const user = response.data;
+    await storage.saveUser(user);
+    return user;
+  },
+
+  async changePassword(payload: ChangePasswordPayload): Promise<void> {
+    await API.put('/auth/password', {
+      currentPassword: payload.currentPassword,
+      newPassword: payload.newPassword,
+    });
   },
 
   /**
