@@ -24,6 +24,17 @@ export interface RegisterPayload {
   phone: string;
 }
 
+export interface UpdateProfilePayload {
+  name: string;
+  email: string;
+  phone: string;
+}
+
+export interface ChangePasswordPayload {
+  currentPassword: string;
+  newPassword: string;
+}
+
 export interface AuthContextType {
   user: User | null;
   token: string | null;
@@ -31,5 +42,8 @@ export interface AuthContextType {
   isAuthenticated: boolean;
   login: (credentials: LoginPayload) => Promise<void>;
   register: (payload: RegisterPayload) => Promise<void>;
+  refreshProfile: () => Promise<User>;
+  updateProfile: (payload: UpdateProfilePayload) => Promise<User>;
+  changePassword: (payload: ChangePasswordPayload) => Promise<void>;
   logout: () => Promise<void>;
 }

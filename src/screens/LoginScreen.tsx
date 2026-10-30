@@ -15,6 +15,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAuth } from '@/context/AuthContext';
+import { Shadows } from '@/constants/theme';
 
 export function LoginScreen() {
   const { login } = useAuth();
@@ -100,11 +101,14 @@ export function LoginScreen() {
               <Text style={styles.label}>Correo electrónico</Text>
               <TextInput
                 style={styles.input}
+                accessibilityLabel="Correo electrónico"
                 placeholder="ejemplo@comercio.com"
                 placeholderTextColor="#94A3B8"
                 autoCapitalize="none"
                 autoCorrect={false}
                 keyboardType="email-address"
+                autoComplete="email"
+                textContentType="emailAddress"
                 value={email}
                 onChangeText={(text) => {
                   setEmail(text);
@@ -119,6 +123,8 @@ export function LoginScreen() {
               <View style={styles.passwordLabelRow}>
                 <Text style={styles.label}>Contraseña</Text>
                 <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
                   onPress={() => setShowPassword(!showPassword)}
                   hitSlop={8}
                   disabled={isSubmitting}>
@@ -129,11 +135,14 @@ export function LoginScreen() {
               </View>
               <TextInput
                 style={styles.input}
+                accessibilityLabel="Contraseña"
                 placeholder="••••••••"
                 placeholderTextColor="#94A3B8"
                 autoCapitalize="none"
                 autoCorrect={false}
                 secureTextEntry={!showPassword}
+                autoComplete="current-password"
+                textContentType="password"
                 value={password}
                 onChangeText={(text) => {
                   setPassword(text);
@@ -205,11 +214,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 12,
-    shadowColor: '#208AEF',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.35,
-    shadowRadius: 10,
-    elevation: 8,
+    ...Shadows.accentRaised,
   },
   logoBadgeText: {
     fontSize: 32,
@@ -234,11 +239,7 @@ const styles = StyleSheet.create({
     padding: 24,
     borderWidth: 1,
     borderColor: '#334155',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.25,
-    shadowRadius: 12,
-    elevation: 5,
+    ...Shadows.overlay,
   },
   formTitle: {
     fontSize: 20,

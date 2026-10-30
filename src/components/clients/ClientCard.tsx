@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import { RiskBadge } from '@/components/RiskBadge';
+import { Shadows } from '@/constants/theme';
 import { Client } from '@/types/client';
 
 interface ClientCardProps {
@@ -76,6 +77,8 @@ export function ClientCard({ client, onEdit, onDelete, onPress }: ClientCardProp
           {/* Teléfono */}
           {client.phone ? (
             <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={`Llamar a ${client.name}`}
               onPress={handleCall}
               style={({ pressed }) => [styles.detailRow, pressed && styles.detailPressed]}
               hitSlop={4}>
@@ -114,6 +117,8 @@ export function ClientCard({ client, onEdit, onDelete, onPress }: ClientCardProp
       {/* Botones de acción lateral/inferior */}
       <View style={styles.actionsContainer}>
         <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`Editar a ${client.name}`}
           style={({ pressed }) => [
             styles.actionButton,
             styles.editButton,
@@ -126,6 +131,8 @@ export function ClientCard({ client, onEdit, onDelete, onPress }: ClientCardProp
         </Pressable>
 
         <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`Eliminar a ${client.name}`}
           style={({ pressed }) => [
             styles.actionButton,
             styles.deleteButton,
@@ -143,17 +150,11 @@ export function ClientCard({ client, onEdit, onDelete, onPress }: ClientCardProp
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#1E293B',
-    borderRadius: 16,
+    backgroundColor: '#172033',
     padding: 16,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: '#334155',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.18,
-    shadowRadius: 6,
-    elevation: 3,
+    marginBottom: 1,
+    borderBottomWidth: 1,
+    borderBottomColor: '#334155',
   },
   cardMain: {
     flexDirection: 'row',
@@ -169,11 +170,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 2,
+    ...Shadows.card,
   },
   avatarText: {
     color: '#FFFFFF',

@@ -15,6 +15,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAuth } from '@/context/AuthContext';
+import { Shadows } from '@/constants/theme';
 
 export function RegisterScreen() {
   const { register } = useAuth();
@@ -117,9 +118,12 @@ export function RegisterScreen() {
               <Text style={styles.label}>Nombre y Apellido</Text>
               <TextInput
                 style={styles.input}
+                accessibilityLabel="Nombre y apellido"
                 placeholder="Juan Pérez"
                 placeholderTextColor="#94A3B8"
                 autoCapitalize="words"
+                autoComplete="name"
+                textContentType="name"
                 value={name}
                 onChangeText={(text) => {
                   setName(text);
@@ -134,11 +138,14 @@ export function RegisterScreen() {
               <Text style={styles.label}>Correo electrónico</Text>
               <TextInput
                 style={styles.input}
+                accessibilityLabel="Correo electrónico"
                 placeholder="juan@comercio.com"
                 placeholderTextColor="#94A3B8"
                 autoCapitalize="none"
                 autoCorrect={false}
                 keyboardType="email-address"
+                autoComplete="email"
+                textContentType="emailAddress"
                 value={email}
                 onChangeText={(text) => {
                   setEmail(text);
@@ -153,9 +160,12 @@ export function RegisterScreen() {
               <Text style={styles.label}>Teléfono de contacto</Text>
               <TextInput
                 style={styles.input}
+                accessibilityLabel="Teléfono de contacto"
                 placeholder="+54 9 11 1234-5678"
                 placeholderTextColor="#94A3B8"
                 keyboardType="phone-pad"
+                autoComplete="tel"
+                textContentType="telephoneNumber"
                 value={phone}
                 onChangeText={(text) => {
                   setPhone(text);
@@ -170,6 +180,8 @@ export function RegisterScreen() {
               <View style={styles.passwordLabelRow}>
                 <Text style={styles.label}>Contraseña (mínimo 6 caracteres)</Text>
                 <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
                   onPress={() => setShowPassword(!showPassword)}
                   hitSlop={8}
                   disabled={isSubmitting}>
@@ -180,11 +192,14 @@ export function RegisterScreen() {
               </View>
               <TextInput
                 style={styles.input}
+                accessibilityLabel="Contraseña"
                 placeholder="••••••••"
                 placeholderTextColor="#94A3B8"
                 autoCapitalize="none"
                 autoCorrect={false}
                 secureTextEntry={!showPassword}
+                autoComplete="new-password"
+                textContentType="newPassword"
                 value={password}
                 onChangeText={(text) => {
                   setPassword(text);
@@ -262,11 +277,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 12,
-    shadowColor: '#208AEF',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.35,
-    shadowRadius: 10,
-    elevation: 8,
+    ...Shadows.accentRaised,
   },
   logoBadgeText: {
     fontSize: 32,
@@ -291,11 +302,7 @@ const styles = StyleSheet.create({
     padding: 24,
     borderWidth: 1,
     borderColor: '#334155',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.25,
-    shadowRadius: 12,
-    elevation: 5,
+    ...Shadows.overlay,
   },
   errorBanner: {
     backgroundColor: '#7F1D1D',

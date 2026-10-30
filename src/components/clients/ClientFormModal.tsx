@@ -3,9 +3,6 @@ import React, { useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
-  KeyboardAvoidingView,
-  Modal,
-  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -15,6 +12,8 @@ import {
 } from 'react-native';
 
 import { Client, ClientFormData } from '@/types/client';
+import { ModalSheet } from '@/components/ui/modal-sheet';
+import { Shadows } from '@/constants/theme';
 
 interface ClientFormModalProps {
   visible: boolean;
@@ -92,6 +91,8 @@ function ClientFormContent({
           </Text>
         </View>
         <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Cerrar formulario de cliente"
           onPress={onClose}
           disabled={isSubmitting}
           style={({ pressed }) => [styles.closeButton, pressed && styles.pressed]}
@@ -222,48 +223,25 @@ export function ClientFormModal({
   onSave,
 }: ClientFormModalProps) {
   return (
-    <Modal
+    <ModalSheet
       visible={visible}
-      animationType="slide"
-      transparent
-      onRequestClose={onClose}>
-      <View style={styles.overlay}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-          style={styles.keyboardContainer}>
-          {visible ? (
-            <ClientFormContent
-              key={clientToEdit ? String(clientToEdit.id) : 'new'}
-              clientToEdit={clientToEdit}
-              onClose={onClose}
-              onSave={onSave}
-            />
-          ) : null}
-        </KeyboardAvoidingView>
-      </View>
-    </Modal>
+      onClose={onClose}>
+      {visible ? (
+        <ClientFormContent
+          key={clientToEdit ? String(clientToEdit.id) : 'new'}
+          clientToEdit={clientToEdit}
+          onClose={onClose}
+          onSave={onSave}
+        />
+      ) : null}
+    </ModalSheet>
   );
 }
 
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    justifyContent: 'flex-end',
-  },
-  keyboardContainer: {
-    width: '100%',
-  },
   modalContent: {
-    backgroundColor: '#1E293B',
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: Platform.OS === 'ios' ? 36 : 24,
+    padding: 0,
     maxHeight: '90%',
-    borderWidth: 1,
-    borderColor: '#334155',
   },
   header: {
     flexDirection: 'row',
@@ -372,11 +350,7 @@ const styles = StyleSheet.create({
     paddingVertical: 13,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#208AEF',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 4,
+    ...Shadows.accent,
   },
   saveButtonText: {
     color: '#FFFFFF',

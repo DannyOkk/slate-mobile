@@ -4,6 +4,7 @@
     "slug": "slate-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
+    "backgroundColor": "#0F172A",
     "icon": "./assets/images/icon.png",
     "scheme": "slatemobile",
     "userInterfaceStyle": "automatic",

@@ -3,6 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Transaction } from '@/types/transaction';
+import { Shadows } from '@/constants/theme';
 
 interface TransactionItemProps {
   transaction: Transaction;
@@ -105,11 +106,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 2,
+    ...Shadows.card,
   },
   leftCol: {
     flexDirection: 'row',
@@ -183,6 +180,7 @@ const styles = StyleSheet.create({
   amountText: {
     fontSize: 15,
     fontWeight: '700',
+    fontVariant: ['tabular-nums'],
   },
   amountFiado: {
     color: '#F87171',

@@ -2,7 +2,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  ActivityIndicator,
   Alert,
   FlatList,
   Pressable,
@@ -16,6 +15,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ClientCard } from '@/components/clients/ClientCard';
 import { ClientFormModal } from '@/components/clients/ClientFormModal';
+import { ScreenLoadingState } from '@/components/screen-loading-state';
+import { MaxContentWidth, Shadows } from '@/constants/theme';
 import { clientService } from '@/services/clientService';
 import { Client, ClientFormData } from '@/types/client';
 
@@ -142,12 +143,6 @@ export function ClientListScreen() {
       {/* Cabecera Principal */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Pressable
-            onPress={() => router.back()}
-            style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}
-            hitSlop={8}>
-            <Ionicons name="arrow-back" size={22} color="#F8FAFC" />
-          </Pressable>
           <View>
             <Text style={styles.headerTitle}>Clientes</Text>
             <Text style={styles.headerSubtitle}>
@@ -157,14 +152,6 @@ export function ClientListScreen() {
         </View>
 
         <View style={styles.headerRight}>
-          <Pressable
-            onPress={() => router.push('/debtors')}
-            style={({ pressed }) => [styles.headerDebtorsButton, pressed && styles.pressed]}
-            hitSlop={6}>
-            <Ionicons name="wallet-outline" size={15} color="#F87171" />
-            <Text style={styles.headerDebtorsButtonText}>Deudores</Text>
-          </Pressable>
-
           <Pressable
             onPress={handleOpenCreateModal}
             style={({ pressed }) => [styles.headerAddButton, pressed && styles.pressed]}
@@ -180,6 +167,8 @@ export function ClientListScreen() {
         <Ionicons name="search-outline" size={18} color="#94A3B8" style={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
+          accessibilityLabel="Buscar clientes"
+          accessibilityHint="Filtra por nombre, teléfono o dirección"
           placeholder="Buscar por nombre, teléfono o dirección..."
           placeholderTextColor="#64748B"
           value={searchQuery}
@@ -188,7 +177,11 @@ export function ClientListScreen() {
           autoCorrect={false}
         />
         {searchQuery ? (
-          <Pressable onPress={() => setSearchQuery('')} hitSlop={8}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Limpiar búsqueda de clientes"
+            onPress={() => setSearchQuery('')}
+            hitSlop={8}>
             <Ionicons name="close-circle" size={18} color="#94A3B8" />
           </Pressable>
         ) : null}
@@ -196,10 +189,7 @@ export function ClientListScreen() {
 
       {/* Contenido Principal */}
       {isLoading ? (
-        <View style={styles.centeredContainer}>
-          <ActivityIndicator size="large" color="#208AEF" />
-          <Text style={styles.loadingText}>Cargando cartera de clientes...</Text>
-        </View>
+        <ScreenLoadingState label="Cargando cartera de clientes..." />
       ) : (
         <FlatList
           data={filteredClients}
@@ -259,6 +249,8 @@ export function ClientListScreen() {
       {/* Botón Flotante (FAB) */}
       {!isLoading && (
         <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Crear nuevo cliente"
           style={({ pressed }) => [styles.fab, pressed && styles.fabPressed]}
           onPress={handleOpenCreateModal}
           hitSlop={8}>
@@ -291,6 +283,9 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#1E293B',
+    width: '100%',
+    maxWidth: MaxContentWidth,
+    alignSelf: 'center',
   },
   headerLeft: {
     flexDirection: 'row',
@@ -323,22 +318,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
-  headerDebtorsButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    backgroundColor: 'rgba(239, 68, 68, 0.1)',
-    paddingHorizontal: 11,
-    paddingVertical: 8,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(239, 68, 68, 0.3)',
-  },
-  headerDebtorsButtonText: {
-    color: '#F87171',
-    fontWeight: '700',
-    fontSize: 12,
-  },
   headerAddButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -347,11 +326,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 13,
     paddingVertical: 8,
     borderRadius: 12,
-    shadowColor: '#208AEF',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 3,
+    ...Shadows.accentCompact,
   },
   headerAddButtonText: {
     color: '#FFFFFF',
@@ -366,6 +341,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 14,
     marginBottom: 8,
+    maxWidth: MaxContentWidth - 40,
+    alignSelf: 'center',
     paddingHorizontal: 12,
     paddingVertical: 9,
     borderWidth: 1,
@@ -384,6 +361,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 12,
     paddingBottom: 90, // Espacio para el FAB
+    width: '100%',
+    maxWidth: MaxContentWidth,
+    alignSelf: 'center',
   },
   centeredContainer: {
     flex: 1,
@@ -435,11 +415,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 12,
     marginTop: 24,
-    shadowColor: '#208AEF',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 4,
+    ...Shadows.accent,
   },
   emptyActionButtonText: {
     color: '#FFFFFF',
@@ -456,11 +432,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#208AEF',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#208AEF',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.45,
-    shadowRadius: 10,
-    elevation: 8,
+    ...Shadows.accentRaised,
   },
   fabPressed: {
     opacity: 0.85,

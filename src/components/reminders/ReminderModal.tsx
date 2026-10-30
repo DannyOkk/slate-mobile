@@ -5,13 +5,15 @@ import DateTimePicker, {
 import React, { useState } from 'react';
 import {
   ActivityIndicator,
-  Modal,
   Platform,
   Pressable,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
+
+import { ModalSheet } from '@/components/ui/modal-sheet';
+import { Shadows } from '@/constants/theme';
 
 interface ReminderModalProps {
   visible: boolean;
@@ -113,12 +115,9 @@ export function ReminderModal({
   };
 
   return (
-    <Modal
+    <ModalSheet
       visible={visible}
-      transparent
-      animationType="fade"
-      onRequestClose={onClose}>
-      <View style={styles.overlay}>
+      onClose={onClose}>
         <View style={styles.modalContainer}>
           {/* Cabecera */}
           <View style={styles.header}>
@@ -133,7 +132,12 @@ export function ReminderModal({
                 </Text>
               </View>
             </View>
-            <Pressable onPress={onClose} style={styles.closeButton} hitSlop={8}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Cerrar recordatorio"
+              onPress={onClose}
+              style={styles.closeButton}
+              hitSlop={8}>
               <Ionicons name="close" size={22} color="#94A3B8" />
             </Pressable>
           </View>
@@ -269,32 +273,15 @@ export function ReminderModal({
             />
           )}
         </View>
-      </View>
-    </Modal>
+    </ModalSheet>
   );
 }
 
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(15, 23, 42, 0.75)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
   modalContainer: {
     width: '100%',
     maxWidth: 420,
-    backgroundColor: '#1E293B',
-    borderRadius: 20,
-    padding: 22,
-    borderWidth: 1,
-    borderColor: '#334155',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.35,
-    shadowRadius: 16,
-    elevation: 8,
+    padding: 0,
   },
   header: {
     flexDirection: 'row',
@@ -448,11 +435,7 @@ const styles = StyleSheet.create({
   },
   confirmBtn: {
     backgroundColor: '#208AEF',
-    shadowColor: '#208AEF',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 4,
+    ...Shadows.accent,
   },
   confirmText: {
     color: '#FFFFFF',
