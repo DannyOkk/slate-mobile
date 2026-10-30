@@ -18,6 +18,7 @@ import { RiskBadge } from '@/components/RiskBadge';
 import { ReminderModal } from '@/components/reminders/ReminderModal';
 import { AddTransactionModal } from '@/components/transactions/AddTransactionModal';
 import { TransactionItem } from '@/components/transactions/TransactionItem';
+import { Shadows } from '@/constants/theme';
 import { clientService } from '@/services/clientService';
 import { notificationService } from '@/services/notificationService';
 import { transactionService } from '@/services/transactionService';
@@ -275,6 +276,7 @@ export function ClientDetailScreen() {
 
                 {/* Importe del Saldo */}
                 <Text
+                  selectable
                   style={[
                     styles.heroBalanceText,
                     hasDebt ? styles.balanceTextDebt : styles.balanceTextClean,
@@ -421,6 +423,7 @@ const styles = StyleSheet.create({
   headerSubtitle: {
     fontSize: 12,
     color: '#94A3B8',
+    fontVariant: ['tabular-nums'],
     marginTop: 1,
   },
   headerRightActions: {
@@ -489,11 +492,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     padding: 20,
     borderWidth: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
-    elevation: 4,
+    ...Shadows.raised,
   },
   heroCardDebt: {
     borderColor: 'rgba(239, 68, 68, 0.4)',
@@ -556,6 +555,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     letterSpacing: -0.8,
     marginVertical: 4,
+    fontVariant: ['tabular-nums'],
   },
   balanceTextDebt: {
     color: '#F87171',
@@ -590,11 +590,7 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingVertical: 14,
     borderRadius: 14,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 6,
-    elevation: 3,
+    ...Shadows.raised,
   },
   fiadoButton: {
     backgroundColor: '#EF4444',

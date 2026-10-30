@@ -2,7 +2,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  ActivityIndicator,
   Alert,
   FlatList,
   Pressable,
@@ -15,6 +14,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { DebtorCard } from '@/components/debtors/DebtorCard';
+import { ScreenLoadingState } from '@/components/screen-loading-state';
+import { MaxContentWidth, Shadows } from '@/constants/theme';
 import { debtorService } from '@/services/debtorService';
 import { Debtor } from '@/types/debtor';
 
@@ -93,33 +94,17 @@ export function DebtorsScreen() {
       {/* Cabecera Principal */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Pressable
-            onPress={() => router.back()}
-            style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}
-            hitSlop={8}>
-            <Ionicons name="arrow-back" size={22} color="#F8FAFC" />
-          </Pressable>
           <View>
             <Text style={styles.headerTitle}>Quién me debe</Text>
             <Text style={styles.headerSubtitle}>Cuentas por cobrar</Text>
           </View>
         </View>
 
-        <Pressable
-          onPress={() => router.push('/clients')}
-          style={({ pressed }) => [styles.headerClientsButton, pressed && styles.pressed]}
-          hitSlop={6}>
-          <Ionicons name="people-outline" size={16} color="#38BDF8" />
-          <Text style={styles.headerClientsButtonText}>Clientes</Text>
-        </Pressable>
       </View>
 
       {/* Contenido con Loading o FlatList */}
       {isLoading ? (
-        <View style={styles.centeredContainer}>
-          <ActivityIndicator size="large" color="#EF4444" />
-          <Text style={styles.loadingText}>Calculando saldos pendientes...</Text>
-        </View>
+        <ScreenLoadingState label="Calculando saldos pendientes..." />
       ) : (
         <FlatList
           data={filteredDebtors}
@@ -167,6 +152,8 @@ export function DebtorsScreen() {
                   <Ionicons name="search-outline" size={18} color="#94A3B8" style={styles.searchIcon} />
                   <TextInput
                     style={styles.searchInput}
+                    accessibilityLabel="Buscar deudores"
+                    accessibilityHint="Filtra por nombre o teléfono"
                     placeholder="Buscar deudor por nombre o teléfono..."
                     placeholderTextColor="#64748B"
                     value={searchQuery}
@@ -175,7 +162,11 @@ export function DebtorsScreen() {
                     autoCorrect={false}
                   />
                   {searchQuery ? (
-                    <Pressable onPress={() => setSearchQuery('')} hitSlop={8}>
+                    <Pressable
+                      accessibilityRole="button"
+                      accessibilityLabel="Limpiar búsqueda de deudores"
+                      onPress={() => setSearchQuery('')}
+                      hitSlop={8}>
                       <Ionicons name="close-circle" size={18} color="#94A3B8" />
                     </Pressable>
                   ) : null}
@@ -206,7 +197,7 @@ export function DebtorsScreen() {
               {!searchQuery && (
                 <Pressable
                   style={({ pressed }) => [styles.emptyActionButton, pressed && styles.pressed]}
-                  onPress={() => router.push('/clients')}>
+                  onPress={() => router.navigate('/clients')}>
                   <Ionicons name="people" size={18} color="#FFFFFF" />
                   <Text style={styles.emptyActionButtonText}>Ver todos los clientes</Text>
                 </Pressable>
@@ -233,6 +224,9 @@ const styles = StyleSheet.create({
     paddingBottom: 14,
     borderBottomWidth: 1,
     borderBottomColor: '#1E293B',
+    width: '100%',
+    maxWidth: MaxContentWidth,
+    alignSelf: 'center',
   },
   headerLeft: {
     flexDirection: 'row',
@@ -260,22 +254,6 @@ const styles = StyleSheet.create({
     color: '#94A3B8',
     marginTop: 1,
   },
-  headerClientsButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    backgroundColor: 'rgba(56, 189, 248, 0.1)',
-    paddingHorizontal: 12,
-    paddingVertical: 7,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: 'rgba(56, 189, 248, 0.3)',
-  },
-  headerClientsButtonText: {
-    color: '#38BDF8',
-    fontWeight: '600',
-    fontSize: 13,
-  },
   centeredContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -289,6 +267,9 @@ const styles = StyleSheet.create({
   listContent: {
     paddingHorizontal: 20,
     paddingBottom: 40,
+    width: '100%',
+    maxWidth: MaxContentWidth,
+    alignSelf: 'center',
   },
   listHeaderContainer: {
     paddingTop: 16,
@@ -301,11 +282,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(239, 68, 68, 0.4)',
     marginBottom: 14,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
-    elevation: 4,
+    ...Shadows.raised,
   },
   heroTopRow: {
     flexDirection: 'row',
@@ -411,11 +388,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 12,
     marginTop: 24,
-    shadowColor: '#208AEF',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 4,
+    ...Shadows.accent,
   },
   emptyActionButtonText: {
     color: '#FFFFFF',

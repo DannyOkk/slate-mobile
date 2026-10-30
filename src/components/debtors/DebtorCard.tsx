@@ -102,7 +102,7 @@ export function DebtorCard({ debtor, onPress }: DebtorCardProps) {
         {/* Monto de la Deuda */}
         <View style={styles.debtCol}>
           <Text style={styles.debtLabel}>Debe</Text>
-          <Text style={styles.debtAmount} numberOfLines={1}>
+          <Text style={styles.debtAmount} numberOfLines={1} selectable>
             {formatCurrency(debtor.totalBalance)}
           </Text>
         </View>
@@ -114,6 +114,8 @@ export function DebtorCard({ debtor, onPress }: DebtorCardProps) {
           {debtor.clientPhone ? (
             <>
               <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={`Llamar a ${debtor.clientName}`}
                 style={({ pressed }) => [
                   styles.contactButton,
                   styles.callButton,
@@ -126,6 +128,8 @@ export function DebtorCard({ debtor, onPress }: DebtorCardProps) {
               </Pressable>
 
               <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={`Enviar WhatsApp a ${debtor.clientName}`}
                 style={({ pressed }) => [
                   styles.contactButton,
                   styles.whatsappButton,
@@ -151,17 +155,11 @@ export function DebtorCard({ debtor, onPress }: DebtorCardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#1E293B',
-    borderRadius: 16,
+    backgroundColor: '#172033',
     padding: 16,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(239, 68, 68, 0.25)',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.18,
-    shadowRadius: 6,
-    elevation: 3,
+    marginBottom: 1,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(239, 68, 68, 0.25)',
   },
   cardPressed: {
     opacity: 0.85,
@@ -239,6 +237,7 @@ const styles = StyleSheet.create({
     color: '#F87171',
     letterSpacing: -0.4,
     marginTop: 1,
+    fontVariant: ['tabular-nums'],
   },
   actionsBar: {
     flexDirection: 'row',
